@@ -1,12 +1,17 @@
-use juniper::{FieldError, FieldResult, RootNode};
+use juniper::{
+    // graphql_value, FieldError,
+    FieldResult,
+    RootNode,
+};
 
-use actix_web::web;
+// use actix_web::web;
 
 use diesel::prelude::*;
 // use r2d2_mysql::mysql::prelude::*;
 // use r2d2_mysql::mysql::{from_row, params, Error as DBError, Row};
 
 use crate::db::Pool;
+use crate::schema::users::dsl as users_dsl;
 
 // use super::blog::Blog;
 // use super::organization::Organization;
@@ -62,40 +67,32 @@ impl QueryRoot {
     //     let (id, user_id, title) = from_row(blog.unwrap().unwrap());
     //     Ok(Blog { id, user_id, title })
     // }
-    //
-    // #[graphql(description = "List of all users")]
-    // fn users(context: &Context, limit: i32, offset: i32) -> FieldResult<Vec<User>> {
-    //     let mut conn = context.dbpool.get().unwrap();
-    //     let users = conn
-    //         .exec_iter(
-    //             "select id, identifier, email from users limit :limit offset :offset",
-    //             params! {"limit" => limit, "offset" => offset},
-    //         )
-    //         .map(|result| {
-    //             result
-    //                 .map(|x| x.unwrap())
-    //                 .map(|mut row| {
-    //                     let (id, identifier, email) = from_row(row);
-    //                     User {
-    //                         id,
-    //                         name: identifier,
-    //                         email,
-    //                     }
-    //                 })
-    //                 .collect()
-    //         })
-    //         .unwrap();
-    //     Ok(users)
-    // }
+
+    #[graphql(description = "List of all users")]
+    fn users(context: &Context, limit: i32, offset: i32) -> FieldResult<Vec<User>> {
+        let mut conn = context.dbpool.get().unwrap();
+
+        // TODO: use web::block to offload blocking Diesel code without blocking server thread
+        // let user = web::block(move || users.filter(id.eq(id)).first::<User>(&conn));
+        users_dsl::users
+            .limit(limit.into())
+            .offset(offset.into())
+            .load::<User>(&conn)
+            .map_err(|e| e.into())
+    }
 
     #[graphql(description = "Get Single user reference by user ID")]
     fn user(context: &Context, id: i32) -> FieldResult<User> {
-        use crate::schema::users::dsl::*;
         let mut conn = context.dbpool.get().unwrap();
 
-        // use web::block to offload blocking Diesel code without blocking server thread
-        let user = web::block(move || users.filter(id.eq(id)).first::<User>(conn)).await;
-        Ok(user)
+        // TODO: use web::block to offload blocking Diesel code without blocking server thread
+        // let user = web::block(move || users.filter(id.eq(id)).first::<User>(&conn));
+        //
+        // diesel::print_sql!(users.filter(id.eq(id)).first::<User>(&conn));
+        users_dsl::users
+            .filter(users_dsl::id.eq(id))
+            .first::<User>(&conn)
+            .map_err(|e| e.into())
     }
 
     // #[graphql(description = "List of all organizations")]
