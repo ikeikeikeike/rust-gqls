@@ -3,4 +3,4 @@
 
 [print_schema]
 file = "src/schema.rs"
-filter = { only_tables = ["users", "organizations", "users_organizations"] }
+filter = { only_tables = ["blogs", "users", "organizations", "users_organizations"] }
