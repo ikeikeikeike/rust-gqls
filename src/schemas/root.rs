@@ -30,8 +30,6 @@ impl QueryRoot {
     fn blogs(context: &Context, limit: i32, offset: i32) -> FieldResult<Vec<Blog>> {
         let mut conn = context.dbpool.get().unwrap();
 
-        // TODO: use web::block to offload blocking Diesel code without blocking server thread
-        // let blog = web::block(move || blogs.filter(id.eq(id)).first::<Blog>(&conn));
         let query = blogs_dsl::blogs.limit(limit.into()).offset(offset.into());
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
@@ -44,10 +42,6 @@ impl QueryRoot {
     fn blog(context: &Context, id: i32) -> FieldResult<Blog> {
         let mut conn = context.dbpool.get().unwrap();
 
-        // TODO: use web::block to offload blocking Diesel code without blocking server thread
-        // let blog = web::block(move || blogs.filter(id.eq(id)).first::<Blog>(&conn));
-        //
-        // diesel::print_sql!(blogs.filter(id.eq(id)).first::<Blog>(&conn));
         let query = blogs_dsl::blogs.filter(blogs_dsl::id.eq(id)).limit(1);
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
@@ -60,8 +54,6 @@ impl QueryRoot {
     fn users(context: &Context, limit: i32, offset: i32) -> FieldResult<Vec<User>> {
         let mut conn = context.dbpool.get().unwrap();
 
-        // TODO: use web::block to offload blocking Diesel code without blocking server thread
-        // let user = web::block(move || users.filter(id.eq(id)).first::<User>(&conn));
         let query = users_dsl::users.limit(limit.into()).offset(offset.into());
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
@@ -74,10 +66,6 @@ impl QueryRoot {
     fn user(context: &Context, id: i32) -> FieldResult<User> {
         let mut conn = context.dbpool.get().unwrap();
 
-        // TODO: use web::block to offload blocking Diesel code without blocking server thread
-        // let user = web::block(move || users.filter(id.eq(id)).first::<User>(&conn));
-        //
-        // diesel::print_sql!(users.filter(id.eq(id)).first::<User>(&conn));
         let query = users_dsl::users.filter(users_dsl::id.eq(id)).limit(1);
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
@@ -90,8 +78,6 @@ impl QueryRoot {
     fn organizations(context: &Context, limit: i32, offset: i32) -> FieldResult<Vec<Organization>> {
         let mut conn = context.dbpool.get().unwrap();
 
-        // TODO: use web::block to offload blocking Diesel code without blocking server thread
-        // let organization = web::block(move || organizations.filter(id.eq(id)).first::<Organization>(&conn));
         let query = organizations_dsl::organizations
             .limit(limit.into())
             .offset(offset.into());
@@ -106,10 +92,6 @@ impl QueryRoot {
     fn organization(context: &Context, id: i32) -> FieldResult<Organization> {
         let mut conn = context.dbpool.get().unwrap();
 
-        // TODO: use web::block to offload blocking Diesel code without blocking server thread
-        // let organization = web::block(move || organizations.filter(id.eq(id)).first::<Organization>(&conn));
-        //
-        // diesel::print_sql!(organizations.filter(id.eq(id)).first::<Organization>(&conn));
         let query = organizations_dsl::organizations
             .filter(organizations_dsl::id.eq(id))
             .limit(1);

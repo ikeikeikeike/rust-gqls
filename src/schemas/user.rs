@@ -5,9 +5,11 @@ use serde::{Deserialize, Serialize};
 
 // use crate::schema::users;
 use crate::schema::blogs::dsl as blogs_dsl;
+use crate::schema::organizations::dsl as orgs_dsl;
 use crate::schemas::root::Context;
 
 use super::blog::Blog;
+// use super::organization::Organization;
 
 // Default, Insertable
 // #[table_name = "users"]
@@ -101,4 +103,17 @@ impl User {
 
         query.load::<Blog>(&conn).map_err(|e| e.into())
     }
+    // fn organizations(&self, context: &Context, limit: i32, offset: i32) -> FieldResult<Vec<Organization>> {
+    //     let mut conn = context.dbpool.get().unwrap();
+    //
+    //     let query = orgs_dsl::organizations
+    //         .filter(orgs_dsl::user_id.eq(self.id))
+    //         .limit(limit.into())
+    //         .offset(offset.into());
+    //
+    //     let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
+    //     println!("DEBUG: {:?}", debug);
+    //
+    //     query.load::<Organization>(&conn).map_err(|e| e.into())
+    // }
 }

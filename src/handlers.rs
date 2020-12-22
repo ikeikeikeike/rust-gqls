@@ -13,6 +13,8 @@ pub async fn graphql(
     let ctx = Context {
         dbpool: pool.get_ref().to_owned(),
     };
+
+    // use web::block to offload blocking Diesel code without blocking server thread
     let res = web::block(move || {
         let res = data.execute(&schema, &ctx);
         Ok::<_, serde_json::error::Error>(serde_json::to_string(&res)?)

@@ -17,6 +17,12 @@ use super::user::User;
 pub struct Blog {
     pub id: i32,
     pub user_id: i32,
+    pub title: String,
+    pub content: String,
+    pub summary: String,
+    pub status: String,
+    pub publish_from: Option<NaiveDateTime>,
+    pub publish_until: Option<NaiveDateTime>,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }
@@ -28,6 +34,24 @@ impl Blog {
     }
     fn user_id(&self) -> i32 {
         self.user_id
+    }
+    fn title(&self) -> &str {
+        self.title.as_str()
+    }
+    fn content(&self) -> &str {
+        self.content.as_str()
+    }
+    fn summary(&self) -> &str {
+        self.summary.as_str()
+    }
+    fn status(&self) -> &str {
+        self.status.as_str()
+    }
+    fn publish_from(&self) -> Option<NaiveDateTime> {
+        self.publish_from
+    }
+    fn publish_until(&self) -> Option<NaiveDateTime> {
+        self.publish_until
     }
     fn created_at(&self) -> NaiveDateTime {
         self.created_at
