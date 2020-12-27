@@ -1,8 +1,14 @@
 use chrono::prelude::*;
+use diesel::prelude::*;
+use juniper::FieldResult;
 use serde::{Deserialize, Serialize};
 
-// use crate::schema::organizations;
+use crate::schema::users::dsl as users_dsl;
+use crate::schema::users_organizations::dsl as users_orgs_dsl;
 use crate::schemas::root::Context;
+
+use super::through::UsersOrganizations;
+use super::user::User;
 
 // Default, Insertable
 #[derive(Debug, Clone, Deserialize, Serialize, Queryable)]
@@ -50,5 +56,22 @@ impl Organization {
     }
     fn updated_at(&self) -> NaiveDateTime {
         self.updated_at
+    }
+    fn users(&self, context: &Context, limit: i32, offset: i32) -> FieldResult<Vec<User>> {
+        let mut conn = context.dbpool.get().unwrap();
+
+        let query = users_dsl::users
+            .inner_join(users_orgs_dsl::users_organizations)
+            .filter(users_orgs_dsl::organization_id.eq(self.id))
+            .limit(limit.into())
+            .offset(offset.into());
+
+        let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
+        println!("DEBUG: {:?}", debug);
+
+        query
+            .load::<(User, UsersOrganizations)>(&conn)
+            .map(|e| e.into_iter().map(|(user, _)| user).collect::<Vec<User>>())
+            .map_err(|e| e.into())
     }
 }
