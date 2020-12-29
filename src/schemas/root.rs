@@ -33,7 +33,7 @@ impl QueryRoot {
         let query = blogs_dsl::blogs.limit(limit.into()).offset(offset.into());
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
-        println!("DEBUG: {:?}", debug);
+        log::debug!("QUERY: {:?}", debug);
 
         query.load::<Blog>(&conn).map_err(|e| e.into())
     }
@@ -45,7 +45,7 @@ impl QueryRoot {
         let query = blogs_dsl::blogs.filter(blogs_dsl::id.eq(id)).limit(1);
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
-        println!("DEBUG: {:?}", debug);
+        log::debug!("QUERY: {:?}", debug);
 
         query.get_result::<Blog>(&conn).map_err(|e| e.into())
     }
@@ -57,7 +57,7 @@ impl QueryRoot {
         let query = users_dsl::users.limit(limit.into()).offset(offset.into());
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
-        println!("DEBUG: {:?}", debug);
+        log::debug!("QUERY: {:?}", debug);
 
         query.load::<User>(&conn).map_err(|e| e.into())
     }
@@ -69,7 +69,7 @@ impl QueryRoot {
         let query = users_dsl::users.filter(users_dsl::id.eq(id)).limit(1);
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
-        println!("DEBUG: {:?}", debug);
+        log::debug!("QUERY: {:?}", debug);
 
         query.get_result::<User>(&conn).map_err(|e| e.into())
     }
@@ -83,7 +83,7 @@ impl QueryRoot {
             .offset(offset.into());
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
-        println!("DEBUG: {:?}", debug);
+        log::debug!("QUERY: {:?}", debug);
 
         query.load::<Organization>(&conn).map_err(|e| e.into())
     }
@@ -97,7 +97,7 @@ impl QueryRoot {
             .limit(1);
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
-        println!("DEBUG: {:?}", debug);
+        log::debug!("QUERY: {:?}", debug);
 
         query
             .get_result::<Organization>(&conn)

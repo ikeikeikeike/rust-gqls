@@ -21,7 +21,7 @@ pub struct User {
     pub identifier: String,
     pub role: String,
     pub email: String,
-    // pub password: String,
+    pub password: String,
     pub date_joined: NaiveDateTime,
     pub last_login: Option<NaiveDateTime>,
     pub is_company_receive_unread: bool,
@@ -52,6 +52,9 @@ impl User {
     }
     fn email(&self) -> &str {
         self.email.as_str()
+    }
+    fn password(&self) -> &str {
+        "!!suppressed!!"
     }
     fn date_joined(&self) -> NaiveDateTime {
         self.date_joined
@@ -100,7 +103,7 @@ impl User {
             .offset(offset.into());
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
-        println!("DEBUG: {:?}", debug);
+        log::debug!("QUERY: {:?}", debug);
 
         query.load::<Blog>(&conn).map_err(|e| e.into())
     }
@@ -119,7 +122,7 @@ impl User {
             .offset(offset.into());
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
-        println!("DEBUG: {:?}", debug);
+        log::debug!("QUERY: {:?}", debug);
 
         query
             .load::<(Organization, UsersOrganizations)>(&conn)

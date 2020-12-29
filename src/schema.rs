@@ -35,7 +35,7 @@ table! {
         identifier -> Varchar,
         role -> Varchar,
         email -> Varchar,
-        // password -> Varchar,
+        password -> Varchar,
         date_joined -> Datetime,
         last_login -> Nullable<Datetime>,
         is_company_receive_unread -> Bool,
@@ -62,4 +62,9 @@ joinable!(blogs -> users (user_id));
 joinable!(users_organizations -> organizations (organization_id));
 joinable!(users_organizations -> users (user_id));
 
-allow_tables_to_appear_in_same_query!(blogs, organizations, users, users_organizations,);
+allow_tables_to_appear_in_same_query!(
+    blogs,
+    organizations,
+    users,
+    users_organizations,
+);

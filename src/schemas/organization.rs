@@ -67,7 +67,7 @@ impl Organization {
             .offset(offset.into());
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
-        println!("DEBUG: {:?}", debug);
+        log::debug!("QUERY: {:?}", debug);
 
         query
             .load::<(User, UsersOrganizations)>(&conn)

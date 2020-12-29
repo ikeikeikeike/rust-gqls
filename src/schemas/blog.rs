@@ -69,7 +69,7 @@ impl Blog {
             .limit(1);
 
         let debug = diesel::debug_query::<diesel::mysql::Mysql, _>(&query);
-        println!("DEBUG: {:?}", debug);
+        log::debug!("QUERY: {:?}", debug);
 
         query.get_result::<User>(&conn).map_err(|e| e.into())
     }
