@@ -9,6 +9,7 @@ default: | help
 .PHONY: diesel-migration
 diesel-migration:  ## Diesel migration with replace Enum to Varchar
 	diesel migration run
+	sed -i 's/ -> Json/ -> Text/' src/schema.rs
 	sed -i 's/ -> Enum/ -> Varchar/' src/schema.rs
 	sed -i 's/<Enum>/<Varchar>/' src/schema.rs
 
